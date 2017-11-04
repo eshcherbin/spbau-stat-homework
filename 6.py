@@ -6,24 +6,29 @@ from scipy.stats import kstest, norm
 
 SAMPLE_SIZE = 100
 N = 1000
-EPS = 0.0522
+
+def type2_errors(low, high):
+    xs = np.arange(0., 1.01, step=.01)
+    p_values_freq = np.zeros(xs.shape)
+    for _ in range(N):
+        sample = np.random.uniform(low=low, high=high, size=SAMPLE_SIZE)
+        ks_test = kstest(sample, 'uniform')
+        for i, x in enumerate(xs):
+            if 1 - ks_test.pvalue <= x:
+                p_values_freq[i] += 1
+    p_values_freq /= N
+    return xs, p_values_freq
+    
 
 if __name__ == '__main__':
     plt.figure(1)
     plt.subplot(121)
 
     # task 4a
-    # alternative: distribution is uniform from [EPS, 1-EPS]
-    xs = np.arange(0., 1.01, step=.01)
-    p_values_freq = np.zeros(xs.shape)
-    for _ in range(N):
-        sample = np.random.uniform(low=EPS, high=1-EPS, size=SAMPLE_SIZE)
-        ks_test = kstest(sample, 'uniform')
-        for i, x in enumerate(xs):
-            if ks_test.pvalue <= x:
-                p_values_freq[i] += 1
-    p_values_freq /= N
-    plt.plot(xs, p_values_freq)
+    for low, high in [(0.05, 0.99), (0.05, 0.92), (0.1, 1.05), (0.5, 1.5)]:
+        xs, p_values_freq = type2_errors(low, high)
+        plt.plot(xs, p_values_freq, label=str((low, high)))
+    plt.legend()
     plt.title('Task 4a')
 
     plt.subplot(122)
