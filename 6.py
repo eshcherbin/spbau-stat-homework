@@ -14,7 +14,7 @@ def type2_errors(low, high):
         sample = np.random.uniform(low=low, high=high, size=SAMPLE_SIZE)
         ks_test = kstest(sample, 'uniform')
         for i, x in enumerate(xs):
-            if 1 - ks_test.pvalue <= x:
+            if ks_test.pvalue >= x:
                 p_values_freq[i] += 1
     p_values_freq /= N
     return xs, p_values_freq
