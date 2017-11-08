@@ -34,6 +34,7 @@ if __name__ == '__main__':
     # t statistic pdf 
     for rho in [-0.9, -0.5, 0, 0.5, 0.9]:
         xs = np.linspace(-4, 4, 50)
+        delta = xs[1] - xs[0]
         t_stat_freq = np.zeros(xs.shape)
         for _ in range(N * 10):
             sample1 = np.random.normal(size=SAMPLE_SIZE)
@@ -44,7 +45,7 @@ if __name__ == '__main__':
                 if ttest.statistic <= x:
                     t_stat_freq[i] += 1
                     break
-        t_stat_freq /= N
+        t_stat_freq /= N * 10 * delta
         plt.plot(xs, t_stat_freq, label='ρ = {}'.format(rho))
     plt.legend()
     plt.xlabel('x')
