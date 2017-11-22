@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry} 
+\usepackage{fontspec}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{polyglossia}
+\usepackage{unicode-math}
+\usepackage{enumerate}
+
+\setdefaultlanguage[spelling=modern,babelshorthands=true]{russian}
+\setotherlanguage{english}
+
+\defaultfontfeatures{Ligatures={TeX}}
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}  
+\setmathfont{Latin Modern Math}
+\AtBeginDocument{\renewcommand{\setminus}{\mathbin{\backslash}}}
+
+\DeclareSymbolFont{cyrletters}{\encodingdefault}{\familydefault}{m}{it}
+\newcommand{\makecyrmathletter}[1]{%
+  \begingroup\lccode`a=#1\lowercase{\endgroup
+  \Umathcode`a}="0 \csname symcyrletters\endcsname\space #1
+}
+\count255="409
+\loop\ifnum\count255<"44F
+  \advance\count255 by 1
+  \makecyrmathletter{\count255}
+\repeat
+%% Simpy adds cyrillic to maths!
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\AtBeginDocument{\renewcommand{\Re}{\operatorname{Re}}}
+\AtBeginDocument{\renewcommand{\Im}{\operatorname{Im}}}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\D}{D}
+ 
+\newenvironment{problem}[2][Задача]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Упражнение]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+ 
+\begin{document}
+ 
+%\renewcommand{\qedsymbol}{\filledbox}
+%Good resources for looking up how to do stuff:
+%Binary operators: http://www.access2science.com/latex/Binary.html
+%General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
+%Or just google stuff
+ 
+\title{Домашнее задание №6}
+\author{Егор Щербин}
+\maketitle
+
+\begin{problem}{1}
+    \quad
+
+    $p(x,y)=\dfrac1\pi$
+
+    Для $y\not\in(-1,1)$ $P(\xi_2=y)=0$, поэтому такой случай не рассматриваем.
+     
+    Для $y\in(-1,1)$ прямая $\xi_2=y$ пересекается с единичным кругом по отрезку $[(-\sqrt{1-y^2},y);(\sqrt{1-y^2},y)]$.
+    Следовательно, $p_{\xi_2}(y)=\int\limits_\mathbb{R}p(x,y)dx=\int\limits_{-\sqrt{1-y^2}}^{\sqrt{1-y^2}}\dfrac1\pi dx=
+    \dfrac{2\sqrt{1-y^2}}\pi$, и $p_{\xi_1|\xi_2}(x|y)=\dfrac{p(x,y)}{p_{\xi_2}(y)}=
+    \dfrac{\frac1\pi}{\frac{2\sqrt{1-y^2}}\pi}=\dfrac1{2\sqrt{1-y^2}}$. 
+    
+    Поскольку при $-1<y<1$ $\xi_1$ распределена равномерно на отрезке от $-\sqrt{1-y^2}$ до $\sqrt{1-y^2}$, и 
+    матожидание у такого распределения равно 0,
+    то условное матожидание $\E(\xi_1|\xi_2=y)=0$.
+\end{problem}
+
+\begin{problem}{2}
+    \quad
+
+    Пусть $R=\sqrt{\xi_1^2+\xi_2^2}$, тогда из равномерности распределения $(\xi_1,\xi_2)$ в единичном круге следует, 
+    что $F_R(r)=P(R<r)=\dfrac{\pi r^2}{\pi\cdot1^2}=r^2\Rightarrow p_R(r)=(r^2)'=2r$ для $0<r<1$, ведь событие
+    $\{R<r\}$ отвечает кругу с радиусом $r$. По формуле полной вероятности, $F_\eta(x)=P(\eta < x)=
+    \int\limits_0^1P(\eta < x|R=r)p_R(r)dr=\int\limits_0^12r(1-e^{-rx})dr$ для $x>0$. Этот интеграл берется с помощью
+    интегирования по частям (или вольфрама) и равен $1-\dfrac{2(1-e^{-x}(x+1))}{x^2}$.
+\end{problem}
+
+\begin{problem}{7}
+    \quad
+
+    Найдем распределение $\eta$: по независимости $\beta_1$ и $\beta_2$ получаем, что $P(\eta > x)=
+    P(\beta_1>x,\beta_2>x)=P(\beta_1>x)\cdot P(\beta_2>x)=e^{-x}\cdot e^{-x}=e^{-2x}$, следовательно, 
+    $\eta\sim EXP(2)$.
+
+    Матожидание случайной величины, распределенной равномерно от 0 до $a$ равно $\dfrac a2$, а дисперсия "--- 
+    $\dfrac{a^2}{12}$ следовательно, условное матожидание $\xi$ равно $\E(\xi|\eta)=\dfrac\eta2$, а условная дисперсия
+    "--- $\D(\xi|\eta)=\dfrac{\eta^2}{12}$. По основному дисперсионному тождеству,
+    $\D\xi=\E(\D(\xi|\eta))+\D(\E(\xi|\eta))=
+    \E\dfrac{\eta^2}{12}+\D\dfrac\eta2=\dfrac1{12}\E\eta^2+\dfrac14\D\eta=\dfrac1{12}(\D\eta+(\E\eta)^2)+\dfrac14\D\eta=
+    \dfrac1{12}(\dfrac14+\dfrac14)+\dfrac14\cdot\dfrac14=\dfrac5{48}$
+\end{problem}
+
+\end{document}
